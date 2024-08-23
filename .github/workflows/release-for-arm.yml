@@ -22,7 +22,7 @@ jobs:
         with:
           deno-version: v1.37
       - name: Setup Fluent CI
-        uses: fluentci-io/setup-fluentci@v1
+        uses: fluentci-io/setup-fluentci@v5
       - uses: oven-sh/setup-bun@v1
         with:
           bun-version: latest
