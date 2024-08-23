@@ -1,36 +1,36 @@
 [package]
-name = "music-player"
-version = "0.2.0-alpha.13"
-edition = "2021"
-repository = "https://github.com/tsirysndr/music-player"
-license = "MIT"
-readme = "README.md"
 authors = ["Tsiry Sandratraina <tsiry.sndr@aol.com>"]
 categories = ["command-line-utilities"]
-keywords = ["tokio", "music", "daemon", "streaming", "player"]
 description = "An extensible music player daemon written in Rust"
+edition = "2021"
+keywords = ["tokio", "music", "daemon", "streaming", "player"]
+license = "MIT"
+name = "music-player"
+readme = "README.md"
+repository = "https://github.com/tsirysndr/music-player"
+version = "0.2.0-alpha.13"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [workspace]
 
 members = [
-    "addons",
-    "audio",
-    "client",
-    "discovery",
-    "entity",
-    "graphql",
-    "migration",
-    "playback",
-    "scanner",
-    "server",
-    "settings",
-    "storage",
-    "tracklist",
-    "types",
-    "webui",
-    "webui/musicplayer/src-tauri"
+  "addons",
+  "audio",
+  "client",
+  "discovery",
+  "entity",
+  "graphql",
+  "migration",
+  "playback",
+  "scanner",
+  "server",
+  "settings",
+  "storage",
+  "tracklist",
+  "types",
+  "webui",
+  "webui/musicplayer/src-tauri",
 ]
 
 [[bin]]
@@ -98,7 +98,6 @@ path = "audio"
 version = "0.1.6"
 
 [dependencies.sea-orm-migration]
-version = "^0.9.0"
 features = [
   # Enable at least one `ASYNC_RUNTIME` and `DATABASE_DRIVER` feature if you want to run migration via CLI.
   # View the list of supported features at https://www.sea-ql.org/SeaORM/docs/install-and-config/database-and-async-runtime.
@@ -108,22 +107,23 @@ features = [
   "runtime-tokio-rustls",
   "sqlx-sqlite",
 ]
+version = "^0.9.0"
 
 [dependencies]
-clap = "3.2.20"
-tokio = { version = "1.21.0", features = ["full"] }
-md5 = "0.7.0"
-sea-orm = { version = "0.9.2", features = ["runtime-tokio-rustls", "sqlx-sqlite"] }
-futures = "0.3.24"
-lofty = "0.9.0"
-owo-colors = "3.5.0"
-tabled = "0.8.0"
-crossterm = { version = "0.25.0", features = ["serde"] }
-tui = { version = "0.19.0", features = ["crossterm", "serde"] }
-tungstenite = "0.17.3"
-futures-channel = "0.3.24"
-serde_json = "1.0.85"
-dirs = "4.0.0"
-spinners = "4.1.0"
 anyhow = "1.0.67"
-
+clap = "3.2.20"
+crossterm = {version = "0.25.0", features = ["serde"]}
+dirs = "4.0.0"
+futures = "0.3.24"
+futures-channel = "0.3.24"
+lofty = "0.9.0"
+md5 = "0.7.0"
+owo-colors = "3.5.0"
+sea-orm = {version = "0.9.2", features = ["runtime-tokio-rustls", "sqlx-sqlite"]}
+serde_json = "1.0.85"
+spinners = "4.1.0"
+tabled = "0.8.0"
+time = "0.3.36"
+tokio = {version = "1.21.0", features = ["full"]}
+tui = {version = "0.19.0", features = ["crossterm", "serde"]}
+tungstenite = "0.17.3"
