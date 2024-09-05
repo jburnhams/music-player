@@ -98,6 +98,7 @@ brew install tsirysndr/tap/musicplayer
 Using [Nix](https://nixos.org/):
 
 ```bash
+cachix use tsirysndr
 nix profile install --experimental-features "nix-command flakes" github:tsirysndr/music-player
 ```
 

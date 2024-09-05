@@ -2,7 +2,7 @@
   description = "Music Player - An extensible music server written in Rust 🚀🎵✨";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.05";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
     crane = {
       url = "github:ipetkov/crane";
@@ -50,7 +50,7 @@
 
           buildInputs = [
             # Add additional build inputs here
-            pkgs.pkgconfig
+            pkgs.pkg-config
             pkgs.gnumake
             pkgs.protobuf
             pkgs.zstd
