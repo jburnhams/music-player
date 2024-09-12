@@ -53,6 +53,13 @@ This is a simple music player that I made for my own use. It is written in Rust 
 Music is played through the server's audio device. The daemon stores info about all available music, and this info can be easily searched and retrieved.
 Like [mpd](https://github.com/MusicPlayerDaemon/MPD) or [Mopidy](https://github.com/mopidy/mopidy) but written in Rust.
 
+> [!NOTE]
+> **Looking for more?**
+> If you're interested in this project, you might want to check out [Rockbox Zig](https://github.com/tsirysndr/rockbox-zig/tree/feat/rockbox-server), 
+> a music player daemon built on the [Rockbox](https://www.rockbox.org) Open Source Firmware. It offers advanced audio playback 
+> features, bringing the best of Rockbox to modern platforms with the power of [Zig](https://ziglang.org/) and [Rust](https://www.rust-lang.org).
+> 
+
 <p style="margin-top: 20px; margin-bottom: 20px;">
   <img src="./preview.svg" width="800" />
 </p>
