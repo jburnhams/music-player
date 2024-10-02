@@ -55,7 +55,7 @@ Like [mpd](https://github.com/MusicPlayerDaemon/MPD) or [Mopidy](https://github.
 
 > [!NOTE]
 > **Looking for more?**
-> If you're interested in this project, you might want to check out [Rockbox Zig](https://github.com/tsirysndr/rockbox-zig/tree/feat/rockbox-server), 
+> If you're interested in this project, you might want to check out [Rockbox Zig](https://github.com/tsirysndr/rockbox-zig), 
 > a music player daemon built on the [Rockbox](https://www.rockbox.org) Open Source Firmware. It offers advanced audio playback 
 > features, bringing the best of Rockbox to modern platforms with the power of [Zig](https://ziglang.org/) and [Rust](https://www.rust-lang.org).
 > 
