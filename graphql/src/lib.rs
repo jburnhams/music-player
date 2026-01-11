@@ -104,19 +104,26 @@ fn scan_upnp_dlna_devices(devices: Arc<Mutex<Vec<Device>>>) {
 
 fn scan_airplay_devices(devices: Arc<Mutex<Vec<Device>>>) {
     thread::spawn(move || {
-        tokio::runtime::Runtime::new().unwrap().block_on(async {
+        let runtime = tokio::runtime::Runtime::new().expect("Failed to create Tokio runtime");
+        runtime.block_on(async {
             let services = discover(AIRPLAY_SERVICE_NAME);
             tokio::pin!(services);
             while let Some(info) = services.next().await {
-                let device = Device::from(info.clone());
-                let mut devices = devices.lock().unwrap();
+                let device = Device::from(info);
+                let mut devices = match devices.lock() {
+                    Ok(guard) => guard,
+                    Err(e) => {
+                        eprintln!("Error locking devices mutex: {}", e);
+                        return;
+                    }
+                };
                 if devices
                     .iter()
                     .find(|d| d.id == device.id && d.service == device.service)
                     .is_none()
                 {
                     devices.push(device.clone());
-                    SimpleBroker::<Device>::publish(device.clone());
+                    SimpleBroker::<Device>::publish(device);
                 }
             }
         });
