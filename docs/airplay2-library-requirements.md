@@ -242,8 +242,8 @@ pub struct PlaybackState {
     /// Current queue
     pub queue: Vec<TrackInfo>,
 
-    /// Index of current track in queue
-    pub queue_index: usize,
+    /// Index of current track in queue (None if queue is empty)
+    pub queue_index: Option<usize>,
 
     /// Shuffle enabled
     pub shuffle: bool,
