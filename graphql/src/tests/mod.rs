@@ -21,6 +21,7 @@ use crate::{
     MusicPlayerSchema,
 };
 
+pub mod devices;
 pub mod library;
 pub mod objects;
 pub mod playback;

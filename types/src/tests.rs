@@ -1,7 +1,9 @@
+use std::collections::HashMap;
 use std::time::Duration;
 
 use super::types::*;
 use lofty::{Accessor, ItemKey, ItemValue, Tag, TagItem, TagType};
+use mdns_sd::ServiceInfo;
 use tantivy::{
     schema::{Schema, SchemaBuilder, STORED, STRING, TEXT},
     Document,
@@ -193,4 +195,46 @@ fn tag_to_simplified_song() {
     assert_eq!(song.album, "The Off-Season");
     assert_eq!(song.genre, "Hip-Hop");
     assert_eq!(song.album_artist, "J. Cole");
+}
+
+#[test]
+fn service_info_to_airplay_device() {
+    // Create a mock AirPlay service info
+    // AirPlay services have format: <id>@<name>._raop._tcp.local.
+    let service_type = "_raop._tcp.local.";
+    let instance_name = "AABBCCDD11223344@Kitchen Speaker";
+    let host_name = "kitchen-speaker.local.";
+    let ip = "192.168.1.150";
+    let port: u16 = 7000;
+    let properties: Option<HashMap<String, String>> = None;
+
+    let service_info = ServiceInfo::new(
+        service_type,
+        instance_name,
+        host_name,
+        ip,
+        port,
+        properties,
+    )
+    .expect("Failed to create ServiceInfo");
+
+    let device = Device::from(service_info);
+
+    // Verify the device is correctly identified as an AirPlay device
+    assert_eq!(device.app, "airplay");
+    assert!(device.is_cast_device);
+    assert!(!device.is_source_device);
+    assert_eq!(device.ip, "192.168.1.150");
+    assert_eq!(device.port, 7000);
+    assert_eq!(device.name, "Kitchen Speaker");
+}
+
+#[test]
+fn airplay_service_name_is_correct() {
+    assert_eq!(AIRPLAY_SERVICE_NAME, "_raop._tcp.local.");
+}
+
+#[test]
+fn chromecast_service_name_is_correct() {
+    assert_eq!(CHROMECAST_SERVICE_NAME, "_googlecast._tcp.local.");
 }
