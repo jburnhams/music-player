@@ -102,6 +102,27 @@ fn scan_upnp_dlna_devices(devices: Arc<Mutex<Vec<Device>>>) {
     });
 }
 
+fn scan_airplay_devices(devices: Arc<Mutex<Vec<Device>>>) {
+    thread::spawn(move || {
+        tokio::runtime::Runtime::new().unwrap().block_on(async {
+            let services = discover(AIRPLAY_SERVICE_NAME);
+            tokio::pin!(services);
+            while let Some(info) = services.next().await {
+                let device = Device::from(info.clone());
+                let mut devices = devices.lock().unwrap();
+                if devices
+                    .iter()
+                    .find(|d| d.id == device.id && d.service == device.service)
+                    .is_none()
+                {
+                    devices.push(device.clone());
+                    SimpleBroker::<Device>::publish(device.clone());
+                }
+            }
+        });
+    });
+}
+
 pub async fn scan_devices() -> Result<Arc<std::sync::Mutex<Vec<Device>>>, Box<dyn std::error::Error>>
 {
     let devices: Arc<std::sync::Mutex<Vec<Device>>> = Arc::new(std::sync::Mutex::new(Vec::new()));
@@ -109,6 +130,7 @@ pub async fn scan_devices() -> Result<Arc<std::sync::Mutex<Vec<Device>>>, Box<dy
     let xbmc_devices = Arc::clone(&devices);
     let chromecast_devices = Arc::clone(&devices);
     let dlna_devices = Arc::clone(&devices);
+    let airplay_devices = Arc::clone(&devices);
 
     scan_mp_devices(mp_devices);
 
@@ -123,6 +145,10 @@ pub async fn scan_devices() -> Result<Arc<std::sync::Mutex<Vec<Device>>>, Box<dy
     tokio::time::sleep(tokio::time::Duration::from_millis(500)).await;
 
     scan_upnp_dlna_devices(dlna_devices);
+
+    tokio::time::sleep(tokio::time::Duration::from_millis(500)).await;
+
+    scan_airplay_devices(airplay_devices);
 
     Ok(devices)
 }
