@@ -10,9 +10,12 @@ use music_player_settings::{read_settings, Settings};
 use music_player_storage::Database;
 use music_player_tracklist::Tracklist as TracklistState;
 use owo_colors::OwoColorize;
-use tokio::net::{TcpListener, TcpStream, UnixListener};
+use tokio::net::{TcpListener, TcpStream};
+#[cfg(unix)]
+use tokio::net::UnixListener;
 use tokio::sync::mpsc::UnboundedSender as TokioUnboundedSender;
 use tokio::sync::Mutex;
+#[cfg(unix)]
 use tokio_stream::wrappers::UnixListenerStream;
 use tonic::transport::Server;
 use tungstenite::Message;
@@ -104,6 +107,7 @@ impl MusicPlayerServer {
         Ok(())
     }
 
+    #[cfg(unix)]
     pub async fn start_over_unix_domain_socket(
         &self,
         path: &str,
