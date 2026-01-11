@@ -104,7 +104,7 @@ impl AirPlayClient {
 - Must handle AirPlay 2 authentication/pairing (HomeKit transient pairing)
 - Must maintain persistent connection during playback
 - Must handle connection drops gracefully with reconnection capability
-- Must support connecting to multiple devices simultaneously (for multi-room)
+- Each `AirPlayClient` instance manages a single device connection; the library must support creating multiple independent `AirPlayClient` instances for multi-room scenarios (orchestrated via `AirPlayGroup`)
 - Should provide connection state change callbacks/events
 
 ---
@@ -411,7 +411,7 @@ impl AirPlayPlayer {
     ) -> Result<(), AirPlayError>;
     pub async fn play_next(&mut self, track: TrackInfo) -> Result<(), AirPlayError>;
     pub async fn get_current_playback(&self) -> Result<PlaybackInfo, AirPlayError>;
-    pub fn disconnect(&mut self) -> Result<(), AirPlayError>;
+    pub async fn disconnect(&mut self) -> Result<(), AirPlayError>;
     pub fn device_type(&self) -> &'static str; // Returns "AirPlay"
 }
 
@@ -421,9 +421,20 @@ pub struct PlaybackInfo {
     pub index: u32,
     pub position_ms: u32,
     pub is_playing: bool,
+    /// Queue items as (track, item_id) tuples where item_id is a unique
+    /// identifier for the track's position in the queue (used for queue
+    /// manipulation operations like remove, reorder, play-at)
     pub items: Vec<(TrackInfo, i32)>,
 }
 ```
+
+> **Note on `disconnect`:** The existing `Player` trait in this music player has `disconnect`
+> as synchronous. For the standalone library, `disconnect` should be async since it involves
+> network I/O. When integrating with the music player, the addon implementation can handle
+> this by either:
+> 1. Spawning the async disconnect in a background task (fire-and-forget)
+> 2. Using a command channel pattern (as Chromecast addon does)
+> 3. Proposing an update to the `Player` trait to make `disconnect` async
 
 ---
 
